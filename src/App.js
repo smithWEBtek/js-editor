@@ -1,27 +1,33 @@
-import React from 'react';
-import './App.css';
+import React, { useState } from 'react';
+import classes from './App.module.css';
 
 function App() {
-  const [jsonData, setJsonData] = React.useState("")
+  const [jsonData, setJsonData] = useState("")
+  const [copied, setCopied] = useState(false)
+  const [buttonText, setButtonText] = useState('Copy to clipboard')
+
   const handleInputChange = (event) => {
     event.preventDefault()
+    setCopied(false)
+    setButtonText('Copy to clipboard')
     setJsonData(event.target.value)
   }
-
-  const replacements = {
-    tilepoolfrac: "dropdownselect",      
-    dropdownselectfrac: "dropdownselect",      
-    TilePoolTemplate: "TilePool2",
-    tilepool: "dropdownselect",
-  }
-
+  
   const copyUpdatedData = () => {
+    setCopied(true)
+    setButtonText("COPY SUCCESSFUL")
     let inputTextArea = document.getElementById("copy-text-input");
     navigator.clipboard.writeText(inputTextArea.value)
     inputTextArea.innerText('Updated JSON copied to clipboard')
   }
-
+  
   React.useEffect(() => {
+    const replacements = {
+      tilepoolfrac: "dropdownselect",      
+      dropdownselectfrac: "dropdownselect",      
+      TilePoolTemplate: "TilePool2",
+      tilepool: "dropdownselect",
+    }
     setJsonData(jsonData.replace(/tilepool|TilePoolTemplate|tilepoolfrac|dropdownselectfrac/g, matched => replacements[matched]));
   },[jsonData])
 
@@ -30,13 +36,16 @@ function App() {
         <textarea
           id="copy-text-input" 
           type="text" 
-          style={{height: '400px', width: '1000px'}}
+          className={classes.inputBox}
           value={jsonData}
           placeholder={'Paste JSON here, then click Copy to Clipboard below'}
           onChange={handleInputChange}
         />
         <p>
-          <button onClick={copyUpdatedData}>Copy to clipboard</button>
+          <button 
+            onClick={copyUpdatedData}
+            className={copied && classes.copied}
+            >{buttonText}</button>
         </p>
     </div>
   );
