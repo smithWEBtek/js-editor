@@ -1,0 +1,12 @@
+
+
+.inputBox {
+    background-color: azure;
+    height: 400px;
+    width: 1000px;
+}
+
+.copied {
+    border: 3px siolid green;
+    background-color: palegreen;
+}
